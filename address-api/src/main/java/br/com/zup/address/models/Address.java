@@ -1,10 +1,13 @@
 package br.com.zup.address.models;
 
+import br.com.zup.address.controllers.dtos.AddressResponseDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.Data;
 import org.hibernate.annotations.UuidGenerator;
 
+@Data
 @Entity
 public class Address {
 
@@ -21,51 +24,14 @@ public class Address {
     public Address() {
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getConsumerId() {
-        return consumerId;
-    }
-
-    public void setConsumerId(String consumerId) {
-        this.consumerId = consumerId;
+    public AddressResponseDTO toDtoResponse(){
+        AddressResponseDTO responseDTO = new AddressResponseDTO();
+        responseDTO.setId(this.id);
+        responseDTO.setStreet(this.street);
+        responseDTO.setCity(this.city);
+        responseDTO.setZipCode(this.zipCode);
+        responseDTO.setState(this.state);
+        responseDTO.setConsumerId(this.consumerId);
+        return responseDTO;
     }
 }

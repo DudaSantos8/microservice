@@ -1,10 +1,13 @@
 package br.com.zup.address.services;
 
+import br.com.zup.address.controllers.dtos.AddressRequestDTO;
+import br.com.zup.address.controllers.dtos.AddressResponseDTO;
 import br.com.zup.address.models.Address;
 import br.com.zup.address.repositories.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,38 +17,41 @@ public class AddressService {
     @Autowired
     private AddressRepository addressRepository;
 
-    // Create
-    public Address createAddress(Address address) {
-        return addressRepository.save(address);
+    public AddressResponseDTO createAddress(Address address) {
+        Address addressSaved = addressRepository.save(address);
+        return addressSaved.toDtoResponse();
     }
 
-    // Read (Get All)
-    public List<Address> getAllAddresses() {
-        return addressRepository.findAll();
-    }
+    public List<AddressResponseDTO> getAllAddresses() {
+        List<AddressResponseDTO> dtoList = new ArrayList<>();
+        List<Address> addressList = addressRepository.findAll();
 
-    // Read (Get by ID)
-    public Optional<Address> getAddressById(String id) {
-        return addressRepository.findById(id);
-    }
-
-    // Update
-    public Address updateAddress(String id, Address updatedAddress) {
-        return addressRepository.findById(id).map(address -> {
-            address.setStreet(updatedAddress.getStreet());
-            address.setCity(updatedAddress.getCity());
-            address.setState(updatedAddress.getState());
-            address.setZipCode(updatedAddress.getZipCode());
-            return addressRepository.save(address);
-        }).orElseThrow(() -> new RuntimeException("Address not found with id " + id));
-    }
-
-    // Delete
-    public void deleteAddress(String id) {
-        if (addressRepository.existsById(id)) {
-            addressRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Address not found with id " + id);
+        for(Address address: addressList){
+            dtoList.add(address.toDtoResponse());
         }
+        return dtoList;
+    }
+
+    public AddressResponseDTO getAddressById(String id) {
+        return getFromRepository(id).toDtoResponse();
+    }
+
+    public AddressResponseDTO updateAddress(String id, AddressRequestDTO updatedAddress) {
+        getFromRepository(id);
+        Address addressUpdated = addressRepository.saveAndFlush(updatedAddress.toEntity());
+        return addressUpdated.toDtoResponse();
+    }
+
+    public void deleteAddress(String id) {
+        Address address = getFromRepository(id);
+        addressRepository.deleteById(address.getId());
+    }
+
+    private Address getFromRepository(String id){
+        Optional<Address> addressOptional = addressRepository.findById(id);
+        if (addressOptional.isEmpty()){
+            throw new RuntimeException("Address not found with id :" + id);
+        }
+        return addressOptional.get();
     }
 }
