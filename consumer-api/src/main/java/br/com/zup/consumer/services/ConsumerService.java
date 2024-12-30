@@ -1,5 +1,7 @@
 package br.com.zup.consumer.services;
 
+import br.com.zup.consumer.controllers.dtos.ConsumerRequestDTO;
+import br.com.zup.consumer.controllers.dtos.ConsumerResponseDTO;
 import br.com.zup.consumer.repositories.ConsumerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import br.com.zup.consumer.models.Consumer;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,39 +20,41 @@ public class ConsumerService {
     @Autowired
     private ConsumerRepository consumerRepository;
 
-    // Create
-    public Consumer createConsumer(Consumer consumer) {
-        log.info("Start create consumer flow");
-        return consumerRepository.save(consumer);
+    public ConsumerResponseDTO createConsumer(Consumer consumer) {
+        Consumer consumerSaved = consumerRepository.save(consumer);
+        return consumerSaved.toDtoResponse();
     }
 
-    // Read (Get all consumers)
-    public List<Consumer> getAllConsumers() {
-        return consumerRepository.findAll();
-    }
+    public List<ConsumerResponseDTO> getAllConsumers() {
+        List<ConsumerResponseDTO> dtoList = new ArrayList<>();
+        List<Consumer> addressList = consumerRepository.findAll();
 
-    // Read (Get consumer by ID)
-    public Optional<Consumer> getConsumerById(String id) {
-        return consumerRepository.findById(id);
-    }
-
-    // Update
-    public Consumer updateConsumer(String id, Consumer updatedConsumer) {
-        return consumerRepository.findById(id).map(consumer -> {
-            consumer.setName(updatedConsumer.getName());
-            consumer.setAge(updatedConsumer.getAge());
-            consumer.setEmail(updatedConsumer.getEmail());
-            return consumerRepository.save(consumer);
-        }).orElseThrow(() -> new RuntimeException("Consumer not found with id: " + id));
-    }
-
-    // Delete
-    public void deleteConsumer(String id) {
-        if (consumerRepository.existsById(id)) {
-            consumerRepository.deleteById(id);
-        } else {
-            log.error("Delete consumer blocked: consumer not found: id "+id);
-            throw new RuntimeException("Consumer not found with id: " + id);
+        for (Consumer consumer : addressList) {
+            dtoList.add(consumer.toDtoResponse());
         }
+        return dtoList;
+    }
+
+    public ConsumerResponseDTO getConsumerById(String id) {
+        return getFromRepository(id).toDtoResponse();
+    }
+
+    public ConsumerResponseDTO updateConsumer(String id, ConsumerRequestDTO updatedConsumer) {
+        getFromRepository(id);
+        Consumer consumerUpdate = consumerRepository.saveAndFlush(updatedConsumer.toEntity());
+        return consumerUpdate.toDtoResponse();
+    }
+
+    public void deleteConsumer(String id) {
+        Consumer consumer = getFromRepository(id);
+        consumerRepository.deleteById(consumer.getId());
+    }
+
+    private Consumer getFromRepository(String id){
+        Optional<Consumer> consumerOptional = consumerRepository.findById(id);
+        if (consumerOptional.isEmpty()){
+            throw new RuntimeException("Consumer not found with id :" + id);
+        }
+        return consumerOptional.get();
     }
 }

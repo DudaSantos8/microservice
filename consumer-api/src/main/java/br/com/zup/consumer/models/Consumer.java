@@ -1,9 +1,12 @@
 package br.com.zup.consumer.models;
 
+import br.com.zup.consumer.controllers.dtos.ConsumerResponseDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.Data;
 import org.hibernate.annotations.UuidGenerator;
 
+@Data
 @Entity
 public class Consumer {
 
@@ -14,35 +17,15 @@ public class Consumer {
     private String age;
     private String email;
 
-    public String getId() {
-        return id;
+    public Consumer() {
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAge() {
-        return age;
-    }
-
-    public void setAge(String age) {
-        this.age = age;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public ConsumerResponseDTO toDtoResponse() {
+        ConsumerResponseDTO dto = new ConsumerResponseDTO();
+        dto.setId(this.id);
+        dto.setName(this.name);
+        dto.setAge(this.age);
+        dto.setEmail(this.email);
+        return dto;
     }
 }
