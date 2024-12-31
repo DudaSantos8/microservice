@@ -4,6 +4,7 @@ import br.com.zup.consumer.controllers.dtos.ConsumerRequestDTO;
 import br.com.zup.consumer.controllers.dtos.ConsumerResponseDTO;
 import br.com.zup.consumer.models.Consumer;
 import br.com.zup.consumer.services.ConsumerService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class ConsumerController {
     private ConsumerService consumerService;
 
     @PostMapping
-    public ResponseEntity<?> createConsumer(@RequestBody ConsumerRequestDTO requestDTO) {
+    public ResponseEntity<?> createConsumer(@RequestBody @Valid ConsumerRequestDTO requestDTO) {
         log.info("Start consumer register flow");
         try {
             log.info("Finish happy consumer register flow");
@@ -55,7 +56,7 @@ public class ConsumerController {
 
     // Update
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateConsumer(@PathVariable String id, @RequestBody ConsumerRequestDTO requestDTO) {
+    public ResponseEntity<?> updateConsumer(@PathVariable String id, @RequestBody @Valid ConsumerRequestDTO requestDTO) {
         log.info("Start consumer update flow");
         try {
             log.info("Finish happy consumer update flow");
