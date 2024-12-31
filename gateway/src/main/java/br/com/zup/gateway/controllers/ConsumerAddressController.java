@@ -1,6 +1,7 @@
 package br.com.zup.gateway.controllers;
 
 import br.com.zup.gateway.controllers.dtos.ConsumerAddressRegisterDTO;
+import br.com.zup.gateway.controllers.dtos.ConsumerAddressResponseDTO;
 import br.com.zup.gateway.infra.clients.address.dtos.AddressRegisterDTO;
 import br.com.zup.gateway.infra.clients.address.dtos.AddressResponseDTO;
 import br.com.zup.gateway.infra.clients.consumer.dtos.ConsumerRegisterDTO;
@@ -53,7 +54,12 @@ public class ConsumerAddressController {
         }
     }
 
-    @GetMapping
+    @GetMapping()
+    public ResponseEntity<List<ConsumerAddressResponseDTO>> getAllConsumersAndAddress(){
+        return ResponseEntity.ok(consumerAddressService.getAllConsumerAndAddress());
+    }
+
+    @GetMapping("/consumer")
     public ResponseEntity<List<ConsumerResponseDTO>> getAllConsumers(){
         return ResponseEntity.ok(consumerAddressService.getAllConsumers());
     }
