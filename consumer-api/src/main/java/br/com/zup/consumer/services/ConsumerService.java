@@ -40,9 +40,15 @@ public class ConsumerService {
     }
 
     public ConsumerResponseDTO updateConsumer(String id, ConsumerRequestDTO updatedConsumer) {
-        getFromRepository(id);
-        Consumer consumerUpdate = consumerRepository.saveAndFlush(updatedConsumer.toEntity());
-        return consumerUpdate.toDtoResponse();
+        Optional<Consumer> optional = consumerRepository.findById(id);
+        if(optional.isPresent()){
+            optional.get().setName(updatedConsumer.getName());
+            optional.get().setAge(updatedConsumer.getAge());
+            optional.get().setEmail(updatedConsumer.getEmail());
+            return consumerRepository.save(optional.get()).toDtoResponse();
+        }else{
+            throw new RuntimeException("Consumer not found with id :" + id);
+        }
     }
 
     public void deleteConsumer(String id) {
