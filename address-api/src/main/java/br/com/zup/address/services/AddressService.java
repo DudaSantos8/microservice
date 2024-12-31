@@ -37,9 +37,17 @@ public class AddressService {
     }
 
     public AddressResponseDTO updateAddress(String id, AddressRequestDTO updatedAddress) {
-        getFromRepository(id);
-        Address addressUpdated = addressRepository.saveAndFlush(updatedAddress.toEntity());
-        return addressUpdated.toDtoResponse();
+        Optional<Address> optional = addressRepository.findById(id);
+        if(optional.isPresent()){
+            optional.get().setStreet(updatedAddress.getStreet());
+            optional.get().setCity(updatedAddress.getCity());
+            optional.get().setZipCode(updatedAddress.getZipCode());
+            optional.get().setState(updatedAddress.getState());
+            optional.get().setConsumerId(updatedAddress.getConsumerId());
+            return addressRepository.save(optional.get()).toDtoResponse();
+        }else{
+            throw new RuntimeException("Address not found with id :" + id);
+        }
     }
 
     public void deleteAddress(String id) {
