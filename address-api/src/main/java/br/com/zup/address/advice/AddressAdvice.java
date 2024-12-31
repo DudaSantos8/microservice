@@ -1,4 +1,4 @@
-package br.com.zup.consumer.infra.advice;
+package br.com.zup.address.advice;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestControllerAdvice
-public class ConsumerAdvice {
+public class AddressAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public List<Errors> handleExeptionValidations(MethodArgumentNotValidException exception){

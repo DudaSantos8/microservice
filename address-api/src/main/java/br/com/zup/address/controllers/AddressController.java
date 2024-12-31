@@ -2,6 +2,7 @@ package br.com.zup.address.controllers;
 
 import br.com.zup.address.controllers.dtos.AddressRequestDTO;
 import br.com.zup.address.services.AddressService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class AddressController {
     private AddressService addressService;
 
     @PostMapping
-    public ResponseEntity<?> createAddress(@RequestBody AddressRequestDTO requestDTO) {
+    public ResponseEntity<?> createAddress(@RequestBody @Valid AddressRequestDTO requestDTO) {
         log.info("Start address register flow");
         try {
             log.info("Finish happy address register flow");
@@ -69,5 +70,6 @@ public class AddressController {
         }catch (Exception e){
             log.info("Show error address delete flow");
             return ResponseEntity.status(404).body(Map.of("message", e.getMessage()));
-        }    }
+        }
+    }
 }

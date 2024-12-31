@@ -1,4 +1,4 @@
-package br.com.zup.consumer.infra.advice;
+package br.com.zup.address.advice;
 
 import lombok.Data;
 
