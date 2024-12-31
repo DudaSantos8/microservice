@@ -1,6 +1,10 @@
 package br.com.zup.gateway.controllers.dtos;
 
+import br.com.zup.gateway.infra.clients.address.dtos.AddressResponseDTO;
+import br.com.zup.gateway.infra.clients.consumer.dtos.ConsumerResponseDTO;
+import lombok.Data;
 
+@Data
 public class ConsumerAddressRegisterDTO {
     private String name;
     private String age;
@@ -10,35 +14,15 @@ public class ConsumerAddressRegisterDTO {
     public ConsumerAddressRegisterDTO() {
     }
 
-    public String getName() {
-        return name;
+    public ConsumerResponseDTO toConsumerResponseDTO(){
+        ConsumerResponseDTO responseDTO = new ConsumerResponseDTO();
+        responseDTO.setName(this.name);
+        responseDTO.setAge(this.age);
+        responseDTO.setEmail(this.email);
+        return responseDTO;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAge() {
-        return age;
-    }
-
-    public void setAge(String age) {
-        this.age = age;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public AddressDTO getAddress() {
-        return address;
-    }
-
-    public void setAddress(AddressDTO address) {
-        this.address = address;
+    public AddressResponseDTO toAddressResponseDTO(){
+        return this.address.toAddressResponseDTO();
     }
 }

@@ -1,5 +1,8 @@
 package br.com.zup.gateway.infra.clients.consumer.dtos;
 
+import lombok.Data;
+
+@Data
 public class ConsumerRegisterDTO {
     private String name;
     private String age;
@@ -8,29 +11,12 @@ public class ConsumerRegisterDTO {
     public ConsumerRegisterDTO() {
     }
 
-    public String getName() {
-        return name;
+    public ConsumerResponseDTO toConsumerResponseDto(){
+        ConsumerResponseDTO responseDTO = new ConsumerResponseDTO();
+        responseDTO.setName(this.name);
+        responseDTO.setAge(this.age);
+        responseDTO.setEmail(this.email);
+        return responseDTO;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAge() {
-        return age;
-    }
-
-    public void setAge(String age) {
-        this.age = age;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
 }
 
