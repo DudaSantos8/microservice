@@ -26,4 +26,6 @@ public interface ConsumerAddressService {
     List<AddressResponseDTO> getAllAddress();
 
     AddressResponseDTO getAddressById(String id);
+
+    ConsumerAddressResponseDTO updateConsumerAddress(ConsumerAddressRegisterDTO registerDTO, String consumerId, String addressId);
 }

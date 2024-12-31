@@ -22,7 +22,8 @@ public class AddressClient {
 
     public AddressResponseDTO registerAddress(AddressRegisterDTO addressRegisterDto){
         try {
-            return webClient.post()
+            return webClient
+                    .post()
                     .uri(URL_BASE)
                     .contentType(MediaType.APPLICATION_JSON)
                     .bodyValue(addressRegisterDto)
@@ -73,4 +74,27 @@ public class AddressClient {
                 .block();
     }
 
+    public AddressResponseDTO updateAddress(String id, AddressRegisterDTO addressRegisterDto){
+        try {
+            return webClient
+                    .put()
+                    .uri(URL_BASE+"/"+id)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(addressRegisterDto)
+                    .retrieve()
+                    .onStatus(HttpStatusCode::is4xxClientError, response ->
+                            response.bodyToMono(String.class)
+                                    .map(body -> new RuntimeException("Address error: " + body))
+                    )
+                    .onStatus(HttpStatusCode::is5xxServerError, response ->
+                            response.bodyToMono(String.class)
+                                    .map(body -> new RuntimeException("Server error: " + body))
+                    )
+                    .bodyToMono(AddressResponseDTO.class)
+                    .block();
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+
+    }
 }

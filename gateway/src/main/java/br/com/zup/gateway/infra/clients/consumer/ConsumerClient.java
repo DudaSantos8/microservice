@@ -70,4 +70,27 @@ public class ConsumerClient {
                 .bodyToMono(new ParameterizedTypeReference<List<ConsumerResponseDTO>>() {})
                 .block();
     }
+
+    public ConsumerResponseDTO updateConsumerClient(String id,ConsumerRegisterDTO registerDTO) {
+        try {
+            return webClient
+                    .put()
+                    .uri(URL_BASE+"/"+id)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(registerDTO)
+                    .retrieve()
+                    .onStatus(HttpStatusCode::is4xxClientError, response ->
+                            response.bodyToMono(String.class)
+                                    .map(body -> new RuntimeException("Client error: " + body))
+                    )
+                    .onStatus(HttpStatusCode::is5xxServerError, response ->
+                            response.bodyToMono(String.class)
+                                    .map(body -> new RuntimeException("Server error: " + body))
+                    )
+                    .bodyToMono(ConsumerResponseDTO.class)
+                    .block();
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
 }

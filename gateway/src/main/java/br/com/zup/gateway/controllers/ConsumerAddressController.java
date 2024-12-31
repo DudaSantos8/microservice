@@ -90,4 +90,15 @@ public class ConsumerAddressController {
             return ResponseEntity.status(500).body(Map.of("message", "Internal server error", "details", e.getMessage()));
         }
     }
+
+    @PutMapping("/updateConsumerAddress")
+    public ResponseEntity<?> updateConsumerAddress(@RequestParam String idConsumer, @RequestParam String idAddress, @RequestBody ConsumerAddressRegisterDTO registerDTO){
+        try {
+            return ResponseEntity.status(201).body(consumerAddressService.updateConsumerAddress(registerDTO, idConsumer, idAddress));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(Map.of("message", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("message", "Internal server error", "details", e.getMessage()));
+        }
+    }
 }

@@ -114,6 +114,18 @@ public class ConsumerAddressServiceImpl implements ConsumerAddressService{
         }
     }
 
+    @Override
+    public ConsumerAddressResponseDTO updateConsumerAddress(ConsumerAddressRegisterDTO registerDTO, String consumerId, String addressId) {
+        try {
+            ConsumerResponseDTO consumerResponseDTO = updateConsumerInternal(consumerId,registerDTO);
+            AddressResponseDTO addressResponseDTO = updateAddressInternal(addressId, registerDTO, consumerResponseDTO.getId());
+
+            return new ConsumerAddressResponseDTO(consumerResponseDTO, addressResponseDTO);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to register consumer and address: " + e.getMessage(), e);
+        }
+    }
+
     private ConsumerResponseDTO registerConsumerInternal(ConsumerAddressRegisterDTO consumerAddressRegisterDTO) {
         try {
             ConsumerResponseDTO consumerResponseDTO = consumerAddressRegisterDTO.toConsumerResponseDTO();
@@ -128,6 +140,25 @@ public class ConsumerAddressServiceImpl implements ConsumerAddressService{
             AddressResponseDTO addressResponseDTO = consumerAddressRegisterDTO.toAddressResponseDTO();
             addressResponseDTO.setConsumerId(consumerId);
             return addressClient.registerAddress(addressResponseDTO.toAddressRegisterDto());
+        }catch (Exception e) {
+            throw new RuntimeException("Error while registering address: " + e.getMessage(), e);
+        }
+    }
+
+    private ConsumerResponseDTO updateConsumerInternal(String id, ConsumerAddressRegisterDTO consumerAddressRegisterDTO) {
+        try {
+            ConsumerResponseDTO consumerResponseDTO = consumerAddressRegisterDTO.toConsumerResponseDTO();
+            return consumerClient.updateConsumerClient(id,consumerResponseDTO.toConsumerRegisterDto());
+        } catch (Exception e) {
+            throw new RuntimeException("Error while registering consumer: " + e.getMessage(), e);
+        }
+    }
+
+    private AddressResponseDTO updateAddressInternal(String id, ConsumerAddressRegisterDTO consumerAddressRegisterDTO, String consumerId) {
+        try {
+            AddressResponseDTO addressResponseDTO = consumerAddressRegisterDTO.toAddressResponseDTO();
+            addressResponseDTO.setConsumerId(consumerId);
+            return addressClient.updateAddress(id, addressResponseDTO.toAddressRegisterDto());
         }catch (Exception e) {
             throw new RuntimeException("Error while registering address: " + e.getMessage(), e);
         }
