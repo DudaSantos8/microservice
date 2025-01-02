@@ -3,6 +3,8 @@ package br.com.zup.gateway.infra.clients.address;
 import br.com.zup.gateway.infra.clients.address.dtos.AddressRegisterDTO;
 import br.com.zup.gateway.infra.clients.address.dtos.AddressResponseDTO;
 import br.com.zup.gateway.infra.clients.consumer.dtos.ConsumerResponseDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatusCode;
@@ -18,10 +20,12 @@ public class AddressClient {
     @Autowired
     private WebClient webClient;
     private final String URL_BASE = "http://localhost:8082/address";
+    private static final Logger log = LoggerFactory.getLogger(AddressClient.class);
 
 
     public AddressResponseDTO registerAddress(AddressRegisterDTO addressRegisterDto){
         try {
+            log.info("accessing external address api to register");
             return webClient
                     .post()
                     .uri(URL_BASE)
@@ -39,6 +43,7 @@ public class AddressClient {
                     .bodyToMono(AddressResponseDTO.class)
                     .block();
         } catch (Exception e) {
+            log.info("catching external api exception");
             throw new RuntimeException(e.getMessage(), e);
         }
 
@@ -46,6 +51,7 @@ public class AddressClient {
 
     public AddressResponseDTO getAddress(String addressId){
         try {
+            log.info("accessing external address api to get by id");
             return webClient
                     .get()
                     .uri(URL_BASE+"/"+addressId)
@@ -61,11 +67,13 @@ public class AddressClient {
                     .bodyToMono(AddressResponseDTO.class)
                     .block();
         }catch (Exception e){
+            log.info("catching external api exception (get by id)");
             throw new RuntimeException(e.getMessage(), e);
         }
     }
 
     public List<AddressResponseDTO> getAllAddress(){
+        log.info("accessing external address api to get all");
         return webClient
                 .get()
                 .uri(URL_BASE)
@@ -76,6 +84,7 @@ public class AddressClient {
 
     public AddressResponseDTO updateAddress(String id, AddressRegisterDTO addressRegisterDto){
         try {
+            log.info("accessing external address api to update");
             return webClient
                     .put()
                     .uri(URL_BASE+"/"+id)
@@ -93,6 +102,7 @@ public class AddressClient {
                     .bodyToMono(AddressResponseDTO.class)
                     .block();
         } catch (Exception e) {
+            log.info("catching external api exception (update)");
             throw new RuntimeException(e.getMessage(), e);
         }
 
@@ -100,6 +110,7 @@ public class AddressClient {
 
     public void deleteAddress(String id){
         try {
+            log.info("accessing external address api to delete");
             webClient
                     .delete()
                     .uri(URL_BASE+"/"+id)
@@ -115,6 +126,7 @@ public class AddressClient {
                     .bodyToMono(ConsumerResponseDTO.class)
                     .block();
         } catch (Exception e) {
+            log.info("catching external api exception (delete)");
             throw new RuntimeException(e.getMessage(), e);
         }
     }

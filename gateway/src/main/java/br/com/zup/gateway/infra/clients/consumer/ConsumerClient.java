@@ -2,6 +2,8 @@ package br.com.zup.gateway.infra.clients.consumer;
 
 import br.com.zup.gateway.infra.clients.consumer.dtos.ConsumerRegisterDTO;
 import br.com.zup.gateway.infra.clients.consumer.dtos.ConsumerResponseDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatusCode;
@@ -17,9 +19,11 @@ public class ConsumerClient {
     @Autowired
     private WebClient webClient;
     private final String URL_BASE = "http://localhost:8081/consumer";
+    private static final Logger log = LoggerFactory.getLogger(ConsumerClient.class);
 
     public ConsumerResponseDTO registerConsumerClient(ConsumerRegisterDTO registerDTO) {
         try {
+            log.info("accessing external consumer api to register");
             return webClient
                     .post()
                     .uri(URL_BASE)
@@ -37,12 +41,14 @@ public class ConsumerClient {
                     .bodyToMono(ConsumerResponseDTO.class)
                     .block();
         } catch (Exception e) {
+            log.info("catching external api exception");
             throw new RuntimeException(e.getMessage(), e);
         }
     }
 
     public ConsumerResponseDTO getConsumer(String consumerId){
         try {
+            log.info("accessing external consumer api to get by id");
             return webClient
                     .get()
                     .uri(URL_BASE+"/"+consumerId)
@@ -58,6 +64,7 @@ public class ConsumerClient {
                     .bodyToMono(ConsumerResponseDTO.class)
                     .block();
         }catch (Exception e){
+            log.info("catching external api exception (get by id)");
             throw new RuntimeException(e.getMessage(), e);
         }
     }
@@ -73,6 +80,7 @@ public class ConsumerClient {
 
     public ConsumerResponseDTO updateConsumer(String id, ConsumerRegisterDTO registerDTO) {
         try {
+            log.info("accessing external consumer api to update");
             return webClient
                     .put()
                     .uri(URL_BASE+"/"+id)
@@ -90,12 +98,14 @@ public class ConsumerClient {
                     .bodyToMono(ConsumerResponseDTO.class)
                     .block();
         } catch (Exception e) {
+            log.info("catching external api exception (update)");
             throw new RuntimeException(e.getMessage(), e);
         }
     }
 
     public void deleteConsumer(String id){
         try {
+            log.info("accessing external consumer api to delete");
             webClient
                     .delete()
                     .uri(URL_BASE+"/"+id)
@@ -111,6 +121,7 @@ public class ConsumerClient {
                     .bodyToMono(ConsumerResponseDTO.class)
                     .block();
         } catch (Exception e) {
+            log.info("catching external api exception (delete)");
             throw new RuntimeException(e.getMessage(), e);
         }
     }
