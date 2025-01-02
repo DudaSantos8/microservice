@@ -1,12 +1,10 @@
-package br.com.zup.gateway.services;
+package br.com.zup.gateway.services.consumerAddress;
 
 import br.com.zup.gateway.controllers.dtos.ConsumerAddressRegisterDTO;
 import br.com.zup.gateway.controllers.dtos.ConsumerAddressResponseDTO;
 import br.com.zup.gateway.infra.clients.address.AddressClient;
-import br.com.zup.gateway.infra.clients.address.dtos.AddressRegisterDTO;
 import br.com.zup.gateway.infra.clients.address.dtos.AddressResponseDTO;
 import br.com.zup.gateway.infra.clients.consumer.ConsumerClient;
-import br.com.zup.gateway.infra.clients.consumer.dtos.ConsumerRegisterDTO;
 import br.com.zup.gateway.infra.clients.consumer.dtos.ConsumerResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +14,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-public class ConsumerAddressServiceImpl implements ConsumerAddressService{
+public class ConsumerAddressServiceImpl implements ConsumerAddressService {
 
     @Autowired
     private ConsumerClient consumerClient;
@@ -37,43 +35,9 @@ public class ConsumerAddressServiceImpl implements ConsumerAddressService{
     }
 
     @Override
-    public ConsumerResponseDTO registerConsumer(ConsumerRegisterDTO consumerRegisterDTO) {
-        try {
-            ConsumerResponseDTO consumerResponseDTO = consumerRegisterDTO.toConsumerResponseDto();
-            return consumerClient.registerConsumerClient(consumerResponseDTO.toConsumerRegisterDto());
-        } catch (Exception e) {
-            throw new RuntimeException("Error while registering consumer: " + e.getMessage(), e);
-        }
-    }
-
-    @Override
-    public AddressResponseDTO registerAddress(AddressRegisterDTO addressRegisterDTO) {
-        try {
-            try {
-                consumerClient.getConsumer(addressRegisterDTO.getConsumerId());
-            }catch (Exception e){
-                throw new RuntimeException("Error while registering address: " + e.getMessage(), e);
-            }
-
-            List<AddressResponseDTO> addressResponseDTOList = getAllAddress();
-
-            for(AddressResponseDTO addressResponseDTO : addressResponseDTOList){
-                if(addressResponseDTO.getConsumerId().equals(addressRegisterDTO.getConsumerId())){
-                    throw new RuntimeException("This consumer already have an address");
-                }
-            }
-
-            AddressResponseDTO addressResponseDTO = addressRegisterDTO.toAddressResponseDto();
-            return addressClient.registerAddress(addressResponseDTO.toAddressRegisterDto());
-        } catch (Exception e) {
-            throw new RuntimeException("Error while registering address: " + e.getMessage(), e);
-        }
-    }
-
-    @Override
     public List<ConsumerAddressResponseDTO> getAllConsumerAndAddress() {
-        List<ConsumerResponseDTO> consumerResponseDTOList = getAllConsumers();
-        List<AddressResponseDTO> addressResponseDTOList = getAllAddress();
+        List<ConsumerResponseDTO> consumerResponseDTOList = consumerClient.getAllConsumers();
+        List<AddressResponseDTO> addressResponseDTOList = addressClient.getAllAddress();
 
         Map<String, AddressResponseDTO> addressMap = addressResponseDTOList.stream()
                 .collect(Collectors.toMap(AddressResponseDTO::getConsumerId, address -> address));
@@ -84,34 +48,6 @@ public class ConsumerAddressServiceImpl implements ConsumerAddressService{
                     return new ConsumerAddressResponseDTO(consumer, address);
                 })
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<ConsumerResponseDTO> getAllConsumers(){
-        return consumerClient.getAllConsumers();
-    }
-
-    @Override
-    public ConsumerResponseDTO getConsumerById(String id) {
-        try {
-            return consumerClient.getConsumer(id);
-        } catch (Exception e) {
-            throw new RuntimeException("Error while get consumer: " + e.getMessage(), e);
-        }
-    }
-
-    @Override
-    public List<AddressResponseDTO> getAllAddress(){
-        return addressClient.getAllAddress();
-    }
-
-    @Override
-    public AddressResponseDTO getAddressById(String id) {
-        try {
-            return addressClient.getAddress(id);
-        } catch (Exception e) {
-            throw new RuntimeException("Error while get address: " + e.getMessage(), e);
-        }
     }
 
     @Override
