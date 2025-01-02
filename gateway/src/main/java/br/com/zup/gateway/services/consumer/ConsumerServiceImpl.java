@@ -37,4 +37,13 @@ public class ConsumerServiceImpl implements ConsumerService {
             throw new RuntimeException("Error while get consumer: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    public ConsumerResponseDTO updateConsumer(ConsumerRegisterDTO registerDTO, String id) {
+        try {
+            return consumerClient.updateConsumer(id, registerDTO);
+        } catch (Exception e) {
+            throw new RuntimeException("Error while update address: " + e.getMessage(), e);
+        }
+    }
 }

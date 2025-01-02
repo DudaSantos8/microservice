@@ -71,7 +71,7 @@ public class ConsumerClient {
                 .block();
     }
 
-    public ConsumerResponseDTO updateConsumerClient(String id,ConsumerRegisterDTO registerDTO) {
+    public ConsumerResponseDTO updateConsumer(String id, ConsumerRegisterDTO registerDTO) {
         try {
             return webClient
                     .put()

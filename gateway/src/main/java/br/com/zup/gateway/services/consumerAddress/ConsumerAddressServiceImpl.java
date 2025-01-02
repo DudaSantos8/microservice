@@ -84,7 +84,7 @@ public class ConsumerAddressServiceImpl implements ConsumerAddressService {
     private ConsumerResponseDTO updateConsumerInternal(String id, ConsumerAddressRegisterDTO consumerAddressRegisterDTO) {
         try {
             ConsumerResponseDTO consumerResponseDTO = consumerAddressRegisterDTO.toConsumerResponseDTO();
-            return consumerClient.updateConsumerClient(id,consumerResponseDTO.toConsumerRegisterDto());
+            return consumerClient.updateConsumer(id,consumerResponseDTO.toConsumerRegisterDto());
         } catch (Exception e) {
             throw new RuntimeException("Error while registering consumer: " + e.getMessage(), e);
         }

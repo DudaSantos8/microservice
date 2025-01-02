@@ -1,5 +1,6 @@
 package br.com.zup.gateway.controllers;
 
+import br.com.zup.gateway.infra.clients.address.dtos.AddressRegisterDTO;
 import br.com.zup.gateway.infra.clients.consumer.dtos.ConsumerRegisterDTO;
 import br.com.zup.gateway.infra.clients.consumer.dtos.ConsumerResponseDTO;
 import br.com.zup.gateway.services.consumer.ConsumerService;
@@ -36,9 +37,20 @@ public class ConsumerController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getConsumerById(@PathVariable String id){
         try {
-            return ResponseEntity.status(201).body(consumerService.getConsumerById(id));
+            return ResponseEntity.status(200).body(consumerService.getConsumerById(id));
         } catch (RuntimeException e) {
             return ResponseEntity.status(400).body(Map.of("message", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("message", "Internal server error", "details", e.getMessage()));
+        }
+    }
+
+    @PutMapping()
+    public ResponseEntity<?> updateAddress(@RequestParam String idAddress, @RequestBody ConsumerRegisterDTO registerDTO){
+        try {
+            return ResponseEntity.status(201).body(consumerService.updateConsumer(registerDTO, idAddress));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(Map.of("message", e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("message", "Internal server error", "details", e.getMessage()));
         }

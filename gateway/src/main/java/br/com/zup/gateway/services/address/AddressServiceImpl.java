@@ -55,4 +55,13 @@ public class AddressServiceImpl implements AddressService {
             throw new RuntimeException("Error while get address: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    public AddressResponseDTO updateAddress(AddressRegisterDTO registerDTO, String id) {
+        try {
+            return addressClient.updateAddress(id, registerDTO);
+        } catch (Exception e) {
+            throw new RuntimeException("Error while update address: " + e.getMessage(), e);
+        }
+    }
 }

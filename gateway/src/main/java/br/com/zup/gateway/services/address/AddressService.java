@@ -11,4 +11,6 @@ public interface AddressService {
     List<AddressResponseDTO> getAllAddress();
 
     AddressResponseDTO getAddressById(String id);
+
+    AddressResponseDTO updateAddress(AddressRegisterDTO registerDTO, String id);
 }
