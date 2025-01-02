@@ -39,7 +39,7 @@ public class ConsumerController {
         try {
             return ResponseEntity.status(200).body(consumerService.getConsumerById(id));
         } catch (RuntimeException e) {
-            return ResponseEntity.status(400).body(Map.of("message", e.getMessage()));
+            return ResponseEntity.status(404).body(Map.of("message", e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("message", "Internal server error", "details", e.getMessage()));
         }

@@ -62,6 +62,17 @@ public class ConsumerAddressServiceImpl implements ConsumerAddressService {
         }
     }
 
+    @Override
+    public void deleteConsumerAddress(String idAddress) {
+        try {
+            AddressResponseDTO addressResponseDTO = addressClient.getAddress(idAddress);
+            consumerClient.deleteConsumer(addressResponseDTO.getConsumerId());
+            addressClient.deleteAddress(addressResponseDTO.getId());
+        }catch (Exception e) {
+            throw new RuntimeException("Error while delete address: " + e.getMessage(), e);
+        }
+    }
+
     private ConsumerResponseDTO registerConsumerInternal(ConsumerAddressRegisterDTO consumerAddressRegisterDTO) {
         try {
             ConsumerResponseDTO consumerResponseDTO = consumerAddressRegisterDTO.toConsumerResponseDTO();

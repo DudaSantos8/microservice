@@ -93,4 +93,25 @@ public class ConsumerClient {
             throw new RuntimeException(e.getMessage(), e);
         }
     }
+
+    public void deleteConsumer(String id){
+        try {
+            webClient
+                    .delete()
+                    .uri(URL_BASE+"/"+id)
+                    .retrieve()
+                    .onStatus(HttpStatusCode::is4xxClientError, response ->
+                            response.bodyToMono(String.class)
+                                    .map(body -> new RuntimeException("Client error: " + body))
+                    )
+                    .onStatus(HttpStatusCode::is5xxServerError, response ->
+                            response.bodyToMono(String.class)
+                                    .map(body -> new RuntimeException("Server error: " + body))
+                    )
+                    .bodyToMono(ConsumerResponseDTO.class)
+                    .block();
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
 }

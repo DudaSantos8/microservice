@@ -11,4 +11,6 @@ public interface ConsumerAddressService {
     List<ConsumerAddressResponseDTO> getAllConsumerAndAddress();
 
     ConsumerAddressResponseDTO updateConsumerAddress(ConsumerAddressRegisterDTO registerDTO, String consumerId, String addressId);
+
+    void deleteConsumerAddress(String idAddress);
 }

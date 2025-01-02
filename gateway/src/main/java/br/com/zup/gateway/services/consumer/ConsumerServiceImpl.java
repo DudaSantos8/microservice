@@ -43,7 +43,7 @@ public class ConsumerServiceImpl implements ConsumerService {
         try {
             return consumerClient.updateConsumer(id, registerDTO);
         } catch (Exception e) {
-            throw new RuntimeException("Error while update address: " + e.getMessage(), e);
+            throw new RuntimeException("Error while update consumer: " + e.getMessage(), e);
         }
     }
 }
