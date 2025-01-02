@@ -13,4 +13,6 @@ public interface AddressService {
     AddressResponseDTO getAddressById(String id);
 
     AddressResponseDTO updateAddress(AddressRegisterDTO registerDTO, String id);
+
+    void deleteAddress(String id);
 }

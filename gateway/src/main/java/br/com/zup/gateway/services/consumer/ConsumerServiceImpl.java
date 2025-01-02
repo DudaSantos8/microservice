@@ -1,5 +1,6 @@
 package br.com.zup.gateway.services.consumer;
 
+import br.com.zup.gateway.infra.clients.address.AddressClient;
 import br.com.zup.gateway.infra.clients.consumer.ConsumerClient;
 import br.com.zup.gateway.infra.clients.consumer.dtos.ConsumerRegisterDTO;
 import br.com.zup.gateway.infra.clients.consumer.dtos.ConsumerResponseDTO;
@@ -13,6 +14,9 @@ public class ConsumerServiceImpl implements ConsumerService {
 
     @Autowired
     private ConsumerClient consumerClient;
+
+    @Autowired
+    private AddressClient addressClient;
 
     @Override
     public ConsumerResponseDTO registerConsumer(ConsumerRegisterDTO consumerRegisterDTO) {

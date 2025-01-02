@@ -13,5 +13,4 @@ public interface ConsumerService {
     ConsumerResponseDTO getConsumerById(String id);
 
     ConsumerResponseDTO updateConsumer(ConsumerRegisterDTO registerDTO, String id);
-
 }

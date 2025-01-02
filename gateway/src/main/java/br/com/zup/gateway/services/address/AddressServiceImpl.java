@@ -64,4 +64,13 @@ public class AddressServiceImpl implements AddressService {
             throw new RuntimeException("Error while update address: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    public void deleteAddress(String id) {
+        try {
+            addressClient.deleteAddress(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Error while delete address: " + e.getMessage(), e);
+        }
+    }
 }

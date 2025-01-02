@@ -1,6 +1,5 @@
 package br.com.zup.gateway.controllers;
 
-import br.com.zup.gateway.infra.clients.address.dtos.AddressRegisterDTO;
 import br.com.zup.gateway.infra.clients.consumer.dtos.ConsumerRegisterDTO;
 import br.com.zup.gateway.infra.clients.consumer.dtos.ConsumerResponseDTO;
 import br.com.zup.gateway.services.consumer.ConsumerService;

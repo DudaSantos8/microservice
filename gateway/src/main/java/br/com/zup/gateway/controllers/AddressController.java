@@ -55,4 +55,16 @@ public class AddressController {
             return ResponseEntity.status(500).body(Map.of("message", "Internal server error", "details", e.getMessage()));
         }
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteAddress(@PathVariable String id){
+        try {
+            addressService.deleteAddress(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(400).body(Map.of("message", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("message", "Internal server error", "details", e.getMessage()));
+        }
+    }
 }
