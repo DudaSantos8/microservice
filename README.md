@@ -6,7 +6,7 @@ Para testar o projeto, é necessário executar os três projetos: `gateway`, `co
 
 Para realizar uma requisição, siga o padrão REST enviando a requisição para o `gateway` através da porta `8080`.
 
-Exemplo:
+### Rotas:
 
 **POST /consumer-address**
 
@@ -25,56 +25,139 @@ Exemplo:
 }
 ```
 
-## Desafio
+**GET /consumer-address**
 
-Implemente as funcionalidades na API `gateway` para permitir a realização das demais operações do CRUD: leitura, atualização e exclusão, tanto de um `consumer` quanto de um `endereço`, de forma individual ou simultânea.
+**Response Body:**
+```json
+{
+  "name": "João da Silva",
+  "age": 30,
+  "email": "joao.silva@example.com",
+  "address": {
+    "street": "Rua das Flores",
+    "city": "São Paulo",
+    "zipCode": "12345-678",
+    "state": "SP",
+    "consumerId": "9867b2de-10d7-4aec-9135-9abd9a934eb3"
+  }
+}
+```
 
-Além disso, refatore o código para torná-lo mais organizado e legível, melhorando também a lógica. Realize essas melhorias tanto no projeto `gateway` quanto nas demais APIs do projeto.
+**PUT /consumer-address**
 
-## IMPORTANTE
+Request Param => IdConsumer
 
-Utilize os logs para se orientar e acompanhar a execução das aplicações. Foram adicionados dois exemplos de logs, porém é necessário incluir mais exemplos para que seja possível compreender por onde os dados estão sendo processados.
+Request Param => IdAddress
 
-# Tarefa: Completar o CRUD para `consumer` e `address` na API Gateway
+**Body:**
+```json
+{
+  "name": "João da Silva",
+  "age": 30,
+  "email": "joao.silva@example.com",
+  "address": {
+    "street": "Rua das Flores",
+    "city": "São Paulo",
+    "zipCode": "12345-678",
+    "state": "SP"
+  }
+}
+```
 
-Sua tarefa é completar o CRUD para os recursos `consumer` e `address`, garantindo que todas as operações passem pela API Gateway, que atua como unificador desses recursos.
+**DELETE /consumer-address**
 
-Atualmente, cada API (`consumer` e `address`) possui um CRUD que ainda não foi implementado na API Gateway. É necessário desenvolver o código que unifica esses recursos na API Gateway, permitindo que tanto `consumer` quanto `address` possam ser acessados de forma separada ou unificada, sempre passando pela API Gateway.
+Path Variable => IdAddress
 
-A API Gateway já possui o fluxo de cadastro implementado, mas ainda falta a implementação de um mecanismo para tratar e responder adequadamente os erros que possam ser retornados pelas APIs `consumer` ou `address`.
+Response => void
 
-## Importante
+-----------------------------------------------------------------
 
-- As validações devem ser realizadas exclusivamente nas APIs `consumer` ou `address`.
-- A API Gateway deve apenas redirecionar as requisições para os serviços corretos e responder de forma apropriada ao cliente que realizou a requisição.
+**POST /consumer**
 
----
+**Body:**
+```json
+{
+  "name": "João da Silva",
+  "age": 30,
+  "email": "joao.silva@example.com"
+}
+```
 
-## Tarefas de Melhoria do Código
+**GET /consumer**
 
-### 1. Implementar as operações de leitura, atualização e exclusão na API Gateway:
-- Criar endpoints na API Gateway para as operações de leitura, atualização e exclusão de `consumer` e `address`.
-- Garantir que as requisições sejam redirecionadas para as APIs correspondentes (`consumer` ou `address`).
+**Response Body:**
+```json
 
-### 2. Unificar os recursos `consumer` e `address`:
-- Implementar um endpoint na API Gateway que permita acessar os dados de `consumer` e `address` de forma unificada.
-- Garantir que o cliente possa optar por acessar os recursos de forma separada ou combinada.
+{
+  "id": "3f9e4857-7e42-4430-936f-7dac7b02a072",
+  "name": "João da Silva",
+  "age": 30,
+  "email": "joao.silva@example.com"
+}
+```
 
-### 3. Tratar erros retornados pelas APIs `consumer` e `address`:
-- Implementar um mecanismo na API Gateway para capturar e tratar os erros retornados pelas APIs `consumer` e `address`.
-- Garantir que a API Gateway responda ao cliente com mensagens de erro claras e no formato adequado.
+**PUT /consumer**
 
-### 4. Adicionar logs detalhados:
-- Incluir logs em todos os pontos críticos da API Gateway para facilitar o rastreamento do fluxo de requisições.
-- Garantir que os logs contenham informações suficientes para identificar a origem de erros e o caminho percorrido pelas requisições.
+Path Variable => IdConsumer
 
-### 5. Refatorar o código para melhorar a organização e legibilidade:
-- Reorganizar o código da API Gateway para torná-lo mais modular e fácil de entender.
-- Aplicar boas práticas de programação, como separação de responsabilidades e reutilização de código.
+**Body:**
+```json
+{
+  "name": "João da Silva",
+  "age": 30,
+  "email": "joao.silva@example.com"
+}
+```
 
-### 6. Documentar os endpoints da API Gateway:
-- Atualizar a documentação da API Gateway para incluir os novos endpoints e suas funcionalidades.
-- Fornecer exemplos de requisições e respostas para cada endpoint.
+------------------------------------------------------
+
+**POST /address**
+
+**Body:**
+```json
+{
+  "street": "Rua das Flores",
+  "city": "São Paulo",
+  "zipCode": "12345-678",
+  "state": "SP",
+  "consumerId": "9867b2de-10d7-4aec-9135-9abd9a934eb3"
+}
+```
+
+**GET /address**
+
+**Response Body:**
+```json
+{
+  "id": "9a6c3908-b17e-447a-8470-2b498659732c",
+  "street": "Rua das Flores",
+  "city": "São Paulo",
+  "zipCode": "12345-678",
+  "state": "SP",
+  "consumerId": "9867b2de-10d7-4aec-9135-9abd9a934eb3"
+}
+```
+
+**PUT /address**
+
+Path Variable => IdAddress
+
+**Body:**
+```json
+{
+  "street": "Rua das Flores",
+  "city": "São Paulo",
+  "zipCode": "12345-678",
+  "state": "SP",
+  "consumerId": "9867b2de-10d7-4aec-9135-9abd9a934eb3"
+}
+```
+
+**DELETE /address**
+
+Path Variable => IdAddress
+
+Response => void
 
 ### 7. Testar o fluxo completo:
 - Criar testes automatizados para validar o funcionamento de todos os endpoints da API Gateway.
