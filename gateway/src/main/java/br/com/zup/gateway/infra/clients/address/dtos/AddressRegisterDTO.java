@@ -13,6 +13,14 @@ public class AddressRegisterDTO {
     public AddressRegisterDTO() {
     }
 
+    public AddressRegisterDTO(String street, String city, String zipCode, String state, String consumerId) {
+        this.street = street;
+        this.city = city;
+        this.zipCode = zipCode;
+        this.state = state;
+        this.consumerId = consumerId;
+    }
+
     public AddressResponseDTO toAddressResponseDto(){
         AddressResponseDTO responseDTO = new AddressResponseDTO();
 
